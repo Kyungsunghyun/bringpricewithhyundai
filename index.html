@@ -1,0 +1,341 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans);font-size:14px;color:var(--color-text-primary)}
+.wrap{padding:1rem 0}
+.ctrl-panel{background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:14px 16px;margin-bottom:1rem}
+.ctrl-row{display:grid;grid-template-columns:100px 1fr 56px;align-items:center;gap:12px;margin-bottom:4px}
+.ctrl-row+.ctrl-row{margin-top:12px;padding-top:12px;border-top:0.5px solid var(--color-border-tertiary)}
+.ctrl-label{font-size:12px;font-weight:600}
+.ctrl-val{font-size:18px;font-weight:700;text-align:right}
+.slider-dist{-webkit-appearance:none;appearance:none;height:6px;border-radius:3px;outline:none;cursor:pointer}
+.slider-dist::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:#7C5CBF;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.25);cursor:pointer}
+.slider-hyu{-webkit-appearance:none;appearance:none;height:6px;border-radius:3px;outline:none;cursor:pointer}
+.slider-hyu::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:#1D9E75;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.25);cursor:pointer}
+.slider-mul{-webkit-appearance:none;appearance:none;height:5px;border-radius:3px;outline:none;cursor:pointer}
+.slider-mul::-webkit-slider-thumb{-webkit-appearance:none;width:15px;height:15px;border-radius:50%;background:#185FA5;border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.2);cursor:pointer}
+.tick-row{display:grid;grid-template-columns:100px 1fr 56px;gap:12px;margin-top:2px;margin-bottom:2px}
+.ticks{display:flex;justify-content:space-between;padding:0 2px}
+.tick{font-size:9px;color:var(--color-text-secondary)}
+.sanity{font-size:11px;padding:5px 10px;border-radius:var(--border-radius-md);margin-top:8px;text-align:center}
+.s-ok{background:#E1F5EE;color:#085041}
+.s-warn{background:#FAEEDA;color:#633806}
+.s-err{background:#FCEBEB;color:#791F1F}
+.active-bar{text-align:center;font-size:12px;font-weight:600;padding:7px 12px;border-radius:var(--border-radius-md);margin-bottom:1rem;transition:all .15s}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1.25rem}
+.pcard{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:12px 14px}
+.pcard.g1{border-left:3px solid #E24B4A}
+.pcard.mid{border-left:3px solid #378ADD}
+.pcard.premium{border-left:3px solid #1D9E75}
+.pcard.race{border-left:3px solid #BA7517}
+.ph{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.pname{font-size:15px;font-weight:600}
+.ptag{font-size:11px;padding:2px 8px;border-radius:var(--border-radius-md);font-weight:500}
+.tag-entry{background:#FCEBEB;color:#A32D2D}
+.tag-mid{background:#E6F1FB;color:#185FA5}
+.tag-premium{background:#E1F5EE;color:#0F6E56}
+.tag-race{background:#FAEEDA;color:#633806}
+.chain{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;align-items:center;gap:4px;margin-bottom:8px}
+.chain-box{text-align:center;padding:5px 3px;border-radius:var(--border-radius-md)}
+.ca{color:var(--color-text-secondary);font-size:15px;text-align:center}
+.cb-fob{background:#E6F1FB}.cb-sup{background:#EAF3DE}.cb-rtl{background:#FAEEDA}
+.cv{font-size:13px;font-weight:600}
+.cl{font-size:10px;color:#555555;margin-top:1px}
+.mul-row{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:6px 8px;margin-bottom:8px}
+.mul-top{display:flex;justify-content:space-between;font-size:11px;color:#555555;margin-bottom:4px}
+.mul-val{font-weight:600;color:#185FA5}
+.bar-wrap{position:relative;height:22px;background:#E0E0E0;border-radius:4px;overflow:hidden;margin:8px 0 3px}
+.bs{position:absolute;height:22px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:600;transition:all .2s}
+.bar-labels{display:flex;justify-content:space-between;font-size:10px;color:#555555;margin-bottom:8px}
+.result-4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:4px;margin-top:4px}
+.rb{text-align:center;padding:6px 3px;border-radius:var(--border-radius-md)}
+.rv{font-size:12px;font-weight:700}
+.rv-sub{font-size:11px;font-weight:700;margin-top:1px}
+/* ★ 라벨 완전 검정 고정 */
+.rl{font-size:11px;font-weight:700;color:#111111 !important;margin-top:3px}
+.tabs{display:flex;gap:8px;margin-bottom:1rem}
+.tab{padding:5px 14px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-secondary);background:var(--color-background-secondary);font-size:12px;cursor:pointer;color:var(--color-text-secondary)}
+.tab.on{background:#1F3864;color:#fff;border-color:#1F3864}
+.sec{display:none}.sec.on{display:block}
+.sum-table{width:100%;border-collapse:collapse;font-size:11px}
+.sum-table th{background:#1F3864;color:#fff;padding:6px 7px;font-size:10px;font-weight:500;text-align:center;line-height:1.4}
+.sum-table td{padding:6px 7px;border-bottom:0.5px solid var(--color-border-tertiary);text-align:center}
+.sum-table tr:nth-child(even) td{background:var(--color-background-secondary)}
+.sum-table tfoot td{font-weight:700;border-top:1.5px solid #1F3864}
+.legend{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:.75rem;font-size:11px;color:var(--color-text-secondary)}
+.leg{display:flex;align-items:center;gap:4px}
+.ld{width:9px;height:9px;border-radius:2px}
+</style>
+
+<div class="wrap">
+<div class="ctrl-panel">
+  <div class="ctrl-row">
+    <span class="ctrl-label" style="color:#7C5CBF">현지 상사<br>마진</span>
+    <input type="range" class="slider-dist" id="sl-dist" min="0" max="100" step="5" value="50" oninput="onDistChange(this.value)">
+    <span class="ctrl-val" style="color:#7C5CBF" id="val-dist">50%</span>
+  </div>
+  <div class="tick-row">
+    <div></div>
+    <div class="ticks">
+      <span class="tick">0%</span><span class="tick">25%</span><span class="tick">50%</span><span class="tick">75%</span><span class="tick">100%</span>
+    </div>
+    <div></div>
+  </div>
+  <div class="ctrl-row">
+    <span class="ctrl-label" style="color:#1D9E75">현대<br>마진</span>
+    <input type="range" class="slider-hyu" id="sl-hyu" min="0" max="100" step="5" value="20" oninput="onHyuChange(this.value)">
+    <span class="ctrl-val" style="color:#1D9E75" id="val-hyu">20%</span>
+  </div>
+  <div class="tick-row">
+    <div></div>
+    <div class="ticks">
+      <span class="tick">0%</span><span class="tick">25%</span><span class="tick">50%</span><span class="tick">75%</span><span class="tick">100%</span>
+    </div>
+    <div></div>
+  </div>
+  <div class="sanity s-ok" id="sanity-msg">현지 상사 50% + 현대 20% = 70% → 본사(FOB+마진) 몫 30%</div>
+</div>
+
+<div class="active-bar s-ok" id="active-bar">
+  현지 상사 <strong id="ab-dist">50%</strong> &nbsp;·&nbsp; 현대 <strong id="ab-hyu">20%</strong> &nbsp;·&nbsp; 본사 몫 <strong id="ab-hq">30%</strong>
+</div>
+
+<div class="tabs">
+  <button class="tab on" onclick="sw('cards',this)">제품별 조정</button>
+  <button class="tab" onclick="sw('summary',this)">요약표 (USD)</button>
+</div>
+
+<div class="sec on" id="cards">
+<div class="legend">
+  <span class="leg"><span class="ld" style="background:#B5D4F4"></span>FOB 원가</span>
+  <span class="leg"><span class="ld" style="background:#97C459"></span>본사 마진</span>
+  <span class="leg"><span class="ld" style="background:#1D9E75"></span>현대 마진</span>
+  <span class="leg"><span class="ld" style="background:#D3D1C7"></span>현지 상사 마진</span>
+</div>
+<div class="grid" id="pgrid"></div>
+</div>
+
+<div class="sec" id="summary">
+  <table class="sum-table">
+    <thead>
+      <tr>
+        <th rowspan="2">제품</th><th rowspan="2">FOB</th><th rowspan="2">배수</th>
+        <th rowspan="2">공급가<br>(본사→현대)</th>
+        <th rowspan="2">납품가<br>(현대→현지상사)</th>
+        <th rowspan="2">소비자가</th>
+        <th colspan="2" style="border-bottom:0.5px solid rgba(255,255,255,0.3)">본사 마진</th>
+        <th colspan="2" style="border-bottom:0.5px solid rgba(255,255,255,0.3)">현대 마진</th>
+        <th colspan="2" style="border-bottom:0.5px solid rgba(255,255,255,0.3)">현지 상사 마진</th>
+      </tr>
+      <tr><th>$</th><th>%</th><th>$</th><th>%</th><th>$</th><th>%</th></tr>
+    </thead>
+    <tbody id="stbody"></tbody>
+    <tfoot id="stfoot"></tfoot>
+  </table>
+  <div style="font-size:11px;color:#555555;margin-top:8px;padding:8px 10px;background:var(--color-background-secondary);border-radius:var(--border-radius-md)">
+    ※ 현지 상사 마진 = 소비자가 × 현지상사% | 납품가(현대→현지상사) = 소비자가 − 현지상사마진 | 공급가 = FOB × 배수
+  </div>
+</div>
+</div>
+
+<script>
+const ff=v=>v.toFixed(2);
+const p1=v=>(Math.round(v*10)/10).toFixed(1);
+
+let distPct=50, hyuPct=20;
+
+const prods=[
+  {id:'G1S',   fob:8.98,  rtl:60,  tag:'entry',   tagLbl:'엔트리',    cls:'g1'},
+  {id:'G1ST',  fob:11.98, rtl:70,  tag:'entry',   tagLbl:'엔트리',    cls:'g1'},
+  {id:'G2',    fob:10.30, rtl:85,  tag:'mid',     tagLbl:'미드레인지', cls:'mid'},
+  {id:'G2T',   fob:13.30, rtl:105, tag:'mid',     tagLbl:'미드레인지', cls:'mid'},
+  {id:'Pro',   fob:19.20, rtl:155, tag:'premium', tagLbl:'프리미엄',   cls:'premium'},
+  {id:'b.race',fob:16.00, rtl:126, tag:'race',    tagLbl:'밴드',       cls:'race'},
+];
+const tagClass={entry:'tag-entry',mid:'tag-mid',premium:'tag-premium',race:'tag-race'};
+
+function targetMul(p){
+  const frac=1-distPct/100-hyuPct/100;
+  return frac<=0?0:+( p.rtl*frac/p.fob ).toFixed(3);
+}
+prods.forEach(p=>{ p.mul=targetMul(p); });
+
+function calc(p){
+  const dist_m    = +(p.rtl*distPct/100).toFixed(2);
+  const wholesale = +(p.rtl-dist_m).toFixed(2);
+  const supply    = +(p.fob*p.mul).toFixed(2);
+  const hq_m      = +(supply-p.fob).toFixed(2);
+  const hyu_m     = +(wholesale-supply).toFixed(2);
+  return{
+    dist_m, wholesale, supply, hq_m, hyu_m,
+    fob_pct:  +p1(p.fob/p.rtl*100),
+    hq_pct:   +p1(hq_m/p.rtl*100),
+    hyu_pct:  +p1(hyu_m/p.rtl*100),
+    dist_pct: +p1(dist_m/p.rtl*100),
+  };
+}
+
+function updateSliderBg(){
+  document.getElementById('sl-dist').style.background=
+    `linear-gradient(to right,#7C5CBF 0%,#7C5CBF ${distPct}%,#CCCCCC ${distPct}%)`;
+  document.getElementById('sl-hyu').style.background=
+    `linear-gradient(to right,#1D9E75 0%,#1D9E75 ${hyuPct}%,#CCCCCC ${hyuPct}%)`;
+}
+
+function updateSanity(){
+  const total=distPct+hyuPct, hqPct=100-total;
+  document.getElementById('ab-dist').textContent=distPct+'%';
+  document.getElementById('ab-hyu').textContent=hyuPct+'%';
+  document.getElementById('ab-hq').textContent=hqPct+'%';
+  const sm=document.getElementById('sanity-msg');
+  const ab=document.getElementById('active-bar');
+  if(hqPct<0){
+    sm.className='sanity s-err';
+    sm.textContent=`현지 상사 ${distPct}% + 현대 ${hyuPct}% = ${total}% → 초과! 합계가 100%를 넘을 수 없습니다`;
+    ab.className='active-bar s-err';
+  } else if(hqPct<10){
+    sm.className='sanity s-warn';
+    sm.textContent=`현지 상사 ${distPct}% + 현대 ${hyuPct}% = ${total}% → 본사 몫 ${hqPct}% (매우 낮음)`;
+    ab.className='active-bar s-warn';
+  } else {
+    sm.className='sanity s-ok';
+    sm.textContent=`현지 상사 ${distPct}% + 현대 ${hyuPct}% = ${total}% → 본사(FOB+마진) 몫 ${hqPct}%`;
+    ab.className='active-bar s-ok';
+  }
+}
+
+function rerender(){
+  prods.forEach(p=>{ p.mul=targetMul(p); });
+  updateSliderBg(); updateSanity();
+  document.getElementById('pgrid').innerHTML=prods.map(renderCard).join('');
+  if(document.getElementById('summary').classList.contains('on')) updateSummary();
+}
+
+function onDistChange(v){ distPct=parseInt(v); document.getElementById('val-dist').textContent=distPct+'%'; rerender(); }
+function onHyuChange(v){ hyuPct=parseInt(v); document.getElementById('val-hyu').textContent=hyuPct+'%'; rerender(); }
+
+function updMul(id,val,slEl){
+  const p=prods.find(x=>x.id===id);
+  p.mul=parseFloat(val);
+  const pct=Math.round((p.mul-1.0)/(2.8-1.0)*100);
+  slEl.style.background=`linear-gradient(to right,#185FA5 0%,#185FA5 ${pct}%,#CCCCCC ${pct}%)`;
+  const el=document.getElementById(`pc-${id}`);
+  if(el) el.outerHTML=renderCard(p);
+  if(document.getElementById('summary').classList.contains('on')) updateSummary();
+}
+
+function barHTML(p,c){
+  const fP=Math.max(0,+p1(p.fob/p.rtl*100));
+  const hqP=Math.max(0,+p1(c.hq_m/p.rtl*100));
+  const hyP=Math.max(0,+p1(c.hyu_m/p.rtl*100));
+  const dP=Math.max(0,+p1(c.dist_m/p.rtl*100));
+  return`<div class="bar-wrap">
+    <div class="bs" style="left:0;width:${fP}%;background:#B5D4F4;color:#042C53">FOB ${fP}%</div>
+    <div class="bs" style="left:${fP}%;width:${hqP}%;background:#97C459;color:#173404">본사 ${hqP}%</div>
+    <div class="bs" style="left:${fP+hqP}%;width:${hyP}%;background:#1D9E75;color:#fff">현대 ${hyP}%</div>
+    <div class="bs" style="left:${fP+hqP+hyP}%;width:${dP}%;background:#C0BDB5;color:#2C2C2A">현지상사 ${dP}%</div>
+  </div>
+  <div class="bar-labels">
+    <span>$0</span>
+    <span style="color:#185FA5">공급가 $${ff(c.supply)}</span>
+    <span style="color:#7C5CBF">납품가 $${ff(c.wholesale)}</span>
+    <span style="color:#8B4500">$${ff(p.rtl)}</span>
+  </div>`;
+}
+
+function renderCard(p){
+  const c=calc(p);
+  const mulPct=Math.round(Math.max(0,Math.min(100,(p.mul-1.0)/(2.8-1.0)*100)));
+  const mulBg=`linear-gradient(to right,#185FA5 0%,#185FA5 ${mulPct}%,#CCCCCC ${mulPct}%)`;
+  return`<div class="pcard ${p.cls}" id="pc-${p.id}">
+  <div class="ph">
+    <span class="pname">${p.id}</span>
+    <span class="ptag ${tagClass[p.tag]}">${p.tagLbl}</span>
+  </div>
+  <div class="chain">
+    <div class="chain-box cb-fob"><div class="cv" style="color:#185FA5">$${ff(p.fob)}</div><div class="cl">FOB 원가</div></div>
+    <div class="ca">→</div>
+    <div class="chain-box cb-sup"><div class="cv" style="color:#3B6D11">$${ff(c.supply)}</div><div class="cl">공급가 ${p.mul>0?ff(p.mul)+'x':'—'}</div></div>
+    <div class="ca">→</div>
+    <div class="chain-box cb-rtl"><div class="cv" style="color:#8B4500">$${ff(p.rtl)}</div><div class="cl">소비자가</div></div>
+  </div>
+  <div class="mul-row">
+    <div class="mul-top">
+      <span>본사 공급가 배수 (FOB ×)</span>
+      <span class="mul-val">${ff(p.mul)}x &nbsp;= $${ff(c.supply)}</span>
+    </div>
+    <input type="range" class="slider-mul" min="1.0" max="2.8" step="0.05" value="${p.mul}"
+      style="width:100%;background:${mulBg}"
+      oninput="updMul('${p.id}',this.value,this)">
+    <div style="display:flex;justify-content:space-between;font-size:9px;color:#555555;margin-top:2px">
+      <span>1.0x</span><span>1.5x</span><span>2.0x</span><span>2.5x</span><span>2.8x</span>
+    </div>
+  </div>
+  ${barHTML(p,c)}
+  <div class="result-4">
+    <div class="rb" style="background:#D8E8F8">
+      <div class="rv" style="color:#0A3F7A">$${ff(p.fob)}</div>
+      <div class="rv-sub" style="color:#0A3F7A">${c.fob_pct}%</div>
+      <div class="rl">FOB 원가</div>
+    </div>
+    <div class="rb" style="background:${c.hq_m<0?'#FCEBEB':'#D4EDD4'}">
+      <div class="rv" style="color:${c.hq_m<0?'#8B0000':'#1A5C1A'}">$${ff(c.hq_m)}</div>
+      <div class="rv-sub" style="color:${c.hq_m<0?'#8B0000':'#1A5C1A'}">${c.hq_pct}%</div>
+      <div class="rl">본사 마진</div>
+    </div>
+    <div class="rb" style="background:${c.hyu_m<0?'#FCEBEB':'#C8EDE0'}">
+      <div class="rv" style="color:${c.hyu_m<0?'#8B0000':'#0A5C3A'}">$${ff(c.hyu_m)}</div>
+      <div class="rv-sub" style="color:${c.hyu_m<0?'#8B0000':'#0A5C3A'}">${c.hyu_pct}%</div>
+      <div class="rl">현대 마진</div>
+    </div>
+    <div class="rb" style="background:#E0D8F0">
+      <div class="rv" style="color:#4A2A8A">$${ff(c.dist_m)}</div>
+      <div class="rv-sub" style="color:#4A2A8A">${c.dist_pct}%</div>
+      <div class="rl">현지 상사</div>
+    </div>
+  </div>
+</div>`;
+}
+
+function sw(id,btn){
+  document.querySelectorAll('.sec').forEach(s=>s.classList.remove('on'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  btn.classList.add('on');
+  if(id==='summary') updateSummary();
+}
+
+function updateSummary(){
+  const tb=document.getElementById('stbody'); tb.innerHTML='';
+  const n=prods.length;
+  prods.forEach(p=>{
+    const c=calc(p);
+    tb.innerHTML+=`<tr>
+      <td><strong>${p.id}</strong></td>
+      <td style="color:#185FA5">$${ff(p.fob)}</td>
+      <td style="font-weight:700;color:#185FA5">${p.mul>0?ff(p.mul)+'x':'—'}</td>
+      <td style="color:#3B6D11;font-weight:600">$${ff(c.supply)}</td>
+      <td style="color:#7C5CBF">$${ff(c.wholesale)}</td>
+      <td style="color:#8B4500">$${ff(p.rtl)}</td>
+      <td style="color:${c.hq_m<0?'#8B0000':'#1A5C1A'}">$${ff(c.hq_m)}</td>
+      <td style="color:${c.hq_m<0?'#8B0000':'#1A5C1A'};font-weight:600">${c.hq_pct}%</td>
+      <td style="color:${c.hyu_m<0?'#8B0000':'#0A5C3A'}">$${ff(c.hyu_m)}</td>
+      <td style="color:${c.hyu_m<0?'#8B0000':'#0A5C3A'};font-weight:700">${c.hyu_pct}%</td>
+      <td style="color:#4A2A8A">$${ff(c.dist_m)}</td>
+      <td style="color:#4A2A8A;font-weight:600">${c.dist_pct}%</td>
+    </tr>`;
+  });
+  const avgHq=p1(prods.reduce((s,p)=>s+calc(p).hq_pct,0)/n);
+  const avgHyu=p1(prods.reduce((s,p)=>s+calc(p).hyu_pct,0)/n);
+  const avgDist=p1(prods.reduce((s,p)=>s+calc(p).dist_pct,0)/n);
+  document.getElementById('stfoot').innerHTML=`<tr style="background:#E1F5EE">
+    <td colspan="6" style="text-align:right;color:#111111">전체 평균</td>
+    <td colspan="2" style="color:#1A5C1A">본사 ${avgHq}%</td>
+    <td colspan="2" style="color:#0A5C3A">현대 ${avgHyu}%</td>
+    <td colspan="2" style="color:#4A2A8A">현지 상사 ${avgDist}%</td>
+  </tr>`;
+}
+
+updateSliderBg(); updateSanity();
+document.getElementById('pgrid').innerHTML=prods.map(renderCard).join('');
+</script>
